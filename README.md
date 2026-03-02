@@ -29,7 +29,7 @@ query instantly.
 [uv](https://github.com/astral-sh/uv).
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/ipeds-database.git
+git clone https://github.com/paulgp/ipeds-database.git
 cd ipeds-database
 
 # Install dependencies and build the database
