@@ -1,6 +1,6 @@
 # Data Dictionary
 
-Source: https://nces.ed.gov/ipeds/use-the-data
+Source: [https://nces.ed.gov/ipeds/use-the-data](https://nces.ed.gov/ipeds/use-the-data)
 
 ## adm
 
@@ -4434,128 +4434,128 @@ Rows: 132,928
 
 | Column | Type | Nulls | Example | Join |
 |--------|------|-------|---------|------|
-| unitid | BIGINT | 0.0% | 199999 | Primary institution ID, joins across all IPEDS tables |
+| unitid | BIGINT | 0.0% | 236577 | Primary institution ID, joins across all IPEDS tables |
 | year | BIGINT | 0.0% | 2014 | Appears in 26 tables, common join key |
-| institution_name | VARCHAR | 0.0% | The Art Institute of Cincinnati-AIC College of Design | Appears in 4 tables, common join key |
-| state | VARCHAR | 0.0% | OH | Appears in 4 tables, common join key |
-| applicants_total | BIGINT | 0.0% | 129 |  |
-| admissions_total | DOUBLE | 1.0% | 6638.0 |  |
-| enrolled_total | DOUBLE | 1.2% | 89.0 |  |
-| admit_rate_pct | DOUBLE | 1.0% | 100.0 |  |
-| yield_rate_pct | DOUBLE | 1.2% | 26.5 |  |
+| institution_name | VARCHAR | 0.0% | Huntingdon County Career and Technology Center | Appears in 4 tables, common join key |
+| state | VARCHAR | 0.0% | IA | Appears in 4 tables, common join key |
+| applicants_total | BIGINT | 0.0% | 868 |  |
+| admissions_total | DOUBLE | 1.0% | 1230.0 |  |
+| enrolled_total | DOUBLE | 1.2% | 219.0 |  |
+| admit_rate_pct | DOUBLE | 1.0% | 58.5 |  |
+| yield_rate_pct | DOUBLE | 1.2% | 30.4 |  |
 
 ## v_institutions
 
 | Column | Type | Nulls | Example | Join |
 |--------|------|-------|---------|------|
-| unitid | BIGINT | 0.0% | 201140 | Primary institution ID, joins across all IPEDS tables |
-| institution_name | VARCHAR | 0.0% | Athenaeum of Ohio | Appears in 4 tables, common join key |
-| ialias | VARCHAR | 11.0% | Appalachian State University |  |
-| addr | VARCHAR | 0.0% | 1200 Taylor Rd |  |
-| city | VARCHAR | 0.0% | Cincinnati |  |
-| state | VARCHAR | 0.0% | OH | Appears in 4 tables, common join key |
-| zip_code | VARCHAR | 0.0% | 45230-2091 |  |
-| fips_state | BIGINT | 0.0% | 39 |  |
-| region | BIGINT | 0.0% | 3 |  |
-| chfnm | VARCHAR | 0.4% | Quinton T. Ross |  |
-| chftitle | VARCHAR | 0.6% | Chairman/CEO |  |
+| unitid | BIGINT | 0.0% | 100724 | Primary institution ID, joins across all IPEDS tables |
+| institution_name | VARCHAR | 0.0% | La James International College-Cedar Falls | Appears in 4 tables, common join key |
+| ialias | VARCHAR | 11.0% | University of Mobile |  |
+| addr | VARCHAR | 0.0% | 915 S Jackson Street |  |
+| city | VARCHAR | 0.0% | Cedar Falls |  |
+| state | VARCHAR | 0.0% | IA | Appears in 4 tables, common join key |
+| zip_code | VARCHAR | 0.0% | 36613-2842 |  |
+| fips_state | BIGINT | 0.0% | 19 |  |
+| region | BIGINT | 0.0% | 5 |  |
+| chfnm | VARCHAR | 0.4% | Dr. Charles Smith |  |
+| chftitle | VARCHAR | 0.6% | President |  |
 | gentele | DOUBLE | 11.5% | 2516755990.0 |  |
-| ein | DOUBLE | 0.9% | 630417508.0 |  |
-| ueis | VARCHAR | 44.0% | E6M6SVPENJG4 |  |
+| ein | DOUBLE | 0.9% | 860434628.0 |  |
+| ueis | VARCHAR | 44.0% | DLJWLMSNK627 |  |
 | opeid | DOUBLE | 1.0% | 102900.0 |  |
 | opeflag | BIGINT | 0.0% | 1 |  |
-| website | VARCHAR | 5.1% | www.jmu.edu/index.shtml |  |
+| website | VARCHAR | 5.1% | https://www.umobile.edu/ |  |
 | adminurl | VARCHAR | 13.3% | ljic.edu/ |  |
-| faidurl | VARCHAR | 13.4% | https://www.cacc.edu/financial-aid/ |  |
-| applurl | VARCHAR | 13.3% | https://umobile.edu/apply/ |  |
-| npricurl | VARCHAR | 17.4% | ljic.edu/student-resources-and-disclosures/ |  |
-| veturl | VARCHAR | 21.9% | https://www.amridgeuniversity.edu/admissions/military/ |  |
+| faidurl | VARCHAR | 13.4% | ljic.edu/financial-aid/ |  |
+| applurl | VARCHAR | 13.3% | https://admissions.uncsa.edu/apply/?_ga=2.250664066.505097636.1573156964-1604... |  |
+| npricurl | VARCHAR | 17.4% | https://umobile.edu/financial-aid/cost-calculator/ |  |
+| veturl | VARCHAR | 21.9% | https://umobile.edu/veterans-affairs/ |  |
 | athurl | VARCHAR | 21.9% |   |  |
-| disaurl | VARCHAR | 26.5% | umobile.edu/studentsuccesscenter/disability-support-services/ |  |
-| sector | BIGINT | 0.0% | 2 | Appears in 3 tables, common join key |
+| disaurl | VARCHAR | 26.5% | ljic.edu/student-resources-and-disclosures/ |  |
+| sector | BIGINT | 0.0% | 9 | Appears in 3 tables, common join key |
 | level | BIGINT | 0.0% | 1 |  |
 | control | BIGINT | 0.0% | 2 |  |
-| hloffer | BIGINT | 0.0% | 7 |  |
+| hloffer | BIGINT | 0.0% | 2 |  |
 | ugoffer | BIGINT | 0.0% | 1 |  |
 | groffer | BIGINT | 0.0% | 1 |  |
-| hdegofr1 | DOUBLE | 14.3% | 12.0 |  |
+| hdegofr1 | DOUBLE | 14.3% | 0.0 |  |
 | degree_granting | BIGINT | 0.0% | 1 |  |
 | hbcu | BIGINT | 0.0% | 2 |  |
 | hospital | BIGINT | 0.0% | 2 |  |
 | medical | BIGINT | 0.0% | 2 |  |
 | tribal | BIGINT | 0.0% | 2 |  |
-| locale_code | BIGINT | 0.0% | 11 |  |
+| locale_code | BIGINT | 0.0% | 13 |  |
 | openpubl | BIGINT | 0.0% | 1 |  |
 | act | VARCHAR | 0.0% | A |  |
 | newid | DOUBLE | 0.1% | -2.0 |  |
 | deathyr | BIGINT | 0.0% | -2 |  |
 | close_date | VARCHAR | 0.7% | -2         |  |
-| currently_active | BIGINT | 0.0% | 3 |  |
+| currently_active | BIGINT | 0.0% | 1 |  |
 | postsec | BIGINT | 0.0% | 1 |  |
 | pseflag | BIGINT | 0.0% | 1 |  |
-| pset4flg | BIGINT | 0.0% | 2 |  |
-| rptmth | DOUBLE | 8.5% | 1.0 |  |
-| instcat | DOUBLE | 8.5% | 4.0 |  |
+| pset4flg | BIGINT | 0.0% | 1 |  |
+| rptmth | DOUBLE | 8.5% | 2.0 |  |
+| instcat | DOUBLE | 8.5% | 2.0 |  |
 | c00carnegie | DOUBLE | 47.0% | 21.0 |  |
-| carnegie_basic | BIGINT | 0.0% | 24 |  |
+| carnegie_basic | BIGINT | 0.0% | -2 |  |
 | carnegieic | DOUBLE | 47.0% | -2.0 |  |
-| carnegiesaec | DOUBLE | 47.0% | -2.0 |  |
+| carnegiesaec | DOUBLE | 47.0% | 3.0 |  |
 | carnegiersch | DOUBLE | 47.0% | -2.0 |  |
-| carnegiesize | DOUBLE | 47.0% | -2.0 |  |
-| carnegiealf | DOUBLE | 47.0% | -2.0 |  |
-| carnegieapm | DOUBLE | 47.0% | 2.0 |  |
-| carnegiegpm | DOUBLE | 47.0% | -2.0 |  |
+| carnegiesize | DOUBLE | 47.0% | 3.0 |  |
+| carnegiealf | DOUBLE | 47.0% | 4.0 |  |
+| carnegieapm | DOUBLE | 47.0% | 4.0 |  |
+| carnegiegpm | DOUBLE | 47.0% | 2.0 |  |
 | land_grant | DOUBLE | 9.5% | 2.0 |  |
 | size_category | DOUBLE | 9.5% | 2.0 |  |
 | f1systyp | DOUBLE | 13.5% | 2.0 | Appears in 3 tables, common join key |
-| f1sysnam | VARCHAR | 13.5% | La James International College                                                   | Appears in 3 tables, common join key |
-| f1syscod | DOUBLE | 19.7% | 137030.0 |  |
+| f1sysnam | VARCHAR | 13.5% | University of North Carolina                                                     | Appears in 3 tables, common join key |
+| f1syscod | DOUBLE | 19.7% | 302750.0 |  |
 | cbsa | DOUBLE | 12.0% | 33660.0 |  |
 | cbsatype | DOUBLE | 12.0% | 1.0 |  |
 | csa | DOUBLE | 12.0% | 380.0 |  |
-| county_fips | DOUBLE | 14.3% | 19013.0 |  |
-| county_name | VARCHAR | 14.3% | Black Hawk County |  |
-| cngdstcd | DOUBLE | 14.3% | 102.0 |  |
+| county_fips | DOUBLE | 14.3% | 1097.0 |  |
+| county_name | VARCHAR | 14.3% | Mobile County |  |
+| cngdstcd | DOUBLE | 14.3% | 1902.0 |  |
 | longitude | DOUBLE | 14.3% | -86.295677 |  |
-| latitude | DOUBLE | 14.3% | 30.793247 |  |
-| dfrcgid | DOUBLE | 13.1% | 124.0 |  |
-| dfrcuscg | DOUBLE | 19.7% | 2.0 |  |
+| latitude | DOUBLE | 14.3% | 36.076183 |  |
+| dfrcgid | DOUBLE | 13.1% | 42.0 |  |
+| dfrcuscg | DOUBLE | 19.7% | 1.0 |  |
 | year | BIGINT | 0.0% | 2024 | Appears in 26 tables, common join key |
-| c21ipug | DOUBLE | 95.6% | 1.0 |  |
+| c21ipug | DOUBLE | 95.6% | 2.0 |  |
 | c21ipgrd | DOUBLE | 95.6% | 0.0 |  |
-| c21ugprf | DOUBLE | 95.6% | -2.0 |  |
-| c21enprf | DOUBLE | 95.6% | -2.0 |  |
-| c21szset | DOUBLE | 95.6% | 6.0 |  |
+| c21ugprf | DOUBLE | 95.6% | 11.0 |  |
+| c21enprf | DOUBLE | 95.6% | 1.0 |  |
+| c21szset | DOUBLE | 95.6% | 18.0 |  |
 | c18basic | DOUBLE | 95.6% | 22.0 |  |
 | c15basic | DOUBLE | 87.8% | -2.0 |  |
 | ccbasic | DOUBLE | 76.7% | -3.0 |  |
-| carnegie | DOUBLE | 62.5% | -3.0 |  |
-| duns | DOUBLE | 85.3% | 38913539.0 |  |
+| carnegie | DOUBLE | 62.5% | 51.0 |  |
+| duns | DOUBLE | 85.3% | 828283874.0 |  |
 | necta | DOUBLE | 68.0% | -2.0 |  |
-| c18ipug | DOUBLE | 92.3% | 16.0 |  |
-| c18ipgrd | DOUBLE | 92.3% | 0.0 |  |
-| c18ugprf | DOUBLE | 92.3% | -2.0 |  |
+| c18ipug | DOUBLE | 92.3% | 4.0 |  |
+| c18ipgrd | DOUBLE | 92.3% | -2.0 |  |
+| c18ugprf | DOUBLE | 92.3% | 5.0 |  |
 | c18enprf | DOUBLE | 92.3% | -2.0 |  |
-| c18szset | DOUBLE | 92.3% | 6.0 |  |
-| c15ipug | DOUBLE | 88.9% | -2.0 |  |
-| c15ipgrd | DOUBLE | 88.9% | -2.0 |  |
-| c15ugprf | DOUBLE | 88.9% | 6.0 |  |
+| c18szset | DOUBLE | 92.3% | -2.0 |  |
+| c15ipug | DOUBLE | 88.9% | 4.0 |  |
+| c15ipgrd | DOUBLE | 88.9% | 0.0 |  |
+| c15ugprf | DOUBLE | 88.9% | -2.0 |  |
 | c15enprf | DOUBLE | 88.9% | -2.0 |  |
-| c15szset | DOUBLE | 88.9% | 6.0 |  |
-| ccipug | DOUBLE | 85.8% | -2.0 |  |
-| ccipgrad | DOUBLE | 85.8% | -3.0 |  |
-| ccugprof | DOUBLE | 85.8% | 2.0 |  |
+| c15szset | DOUBLE | 88.9% | -2.0 |  |
+| ccipug | DOUBLE | 85.8% | 1.0 |  |
+| ccipgrad | DOUBLE | 85.8% | -1.0 |  |
+| ccugprof | DOUBLE | 85.8% | -2.0 |  |
 | ccenrprf | DOUBLE | 85.8% | -3.0 |  |
-| ccsizset | DOUBLE | 85.8% | -3.0 |  |
-| faxtele | DOUBLE | 96.3% | 7328850440.0 |  |
+| ccsizset | DOUBLE | 85.8% | 3.0 |  |
+| faxtele | DOUBLE | 96.3% | 5626930752.0 |  |
 | tenursys | DOUBLE | 90.1% | -1.0 | Appears in 3 tables, common join key |
 | fpoffer | DOUBLE | 85.7% | 2.0 |  |
 | hdegoffr | DOUBLE | 85.7% | 0.0 |  |
-| fintele | DOUBLE | 90.6% | 6175856747.0 |  |
-| admtele | DOUBLE | 89.9% | 6064323627.0 |  |
-| stat_fa | DOUBLE | 91.5% | 5.0 |  |
-| stat_ic | DOUBLE | 91.5% | 1.0 | Appears in 3 tables, common join key |
-| lock_ic | DOUBLE | 91.5% | 0.0 | Appears in 3 tables, common join key |
+| fintele | DOUBLE | 90.6% | 3307620991.0 |  |
+| admtele | DOUBLE | 89.9% | 8164442232202.0 |  |
+| stat_fa | DOUBLE | 91.5% | -9.0 |  |
+| stat_ic | DOUBLE | 91.5% | 5.0 | Appears in 3 tables, common join key |
+| lock_ic | DOUBLE | 91.5% | 8.0 | Appears in 3 tables, common join key |
 | stat_c | DOUBLE | 91.5% | 5.0 | Appears in 3 tables, common join key |
 | lock_c | DOUBLE | 91.5% | -2.0 | Appears in 3 tables, common join key |
 | prch_c | DOUBLE | 91.5% | -2.0 | Appears in 3 tables, common join key |
@@ -4568,83 +4568,83 @@ Rows: 132,928
 | idx_ef | DOUBLE | 91.5% | -2.0 | Appears in 3 tables, common join key |
 | imp_ef | DOUBLE | 91.5% | -2.0 | Appears in 3 tables, common join key |
 | pta99_ef | DOUBLE | 91.5% | 5.0 | Appears in 3 tables, common join key |
-| ptb_ef | DOUBLE | 91.5% | 5.0 | Appears in 3 tables, common join key |
-| ptc_ef | DOUBLE | 91.5% | -9.0 | Appears in 3 tables, common join key |
-| ptd_ef | DOUBLE | 91.5% | -9.0 | Appears in 3 tables, common join key |
-| pteeffy | DOUBLE | 91.5% | 5.0 | Appears in 3 tables, common join key |
-| pteefia | DOUBLE | 91.5% | 5.0 | Appears in 3 tables, common join key |
+| ptb_ef | DOUBLE | 91.5% | -9.0 | Appears in 3 tables, common join key |
+| ptc_ef | DOUBLE | 91.5% | 5.0 | Appears in 3 tables, common join key |
+| ptd_ef | DOUBLE | 91.5% | 1.0 | Appears in 3 tables, common join key |
+| pteeffy | DOUBLE | 91.5% | 1.0 | Appears in 3 tables, common join key |
+| pteefia | DOUBLE | 91.5% | -9.0 | Appears in 3 tables, common join key |
 | fyrpyear | DOUBLE | 91.5% | -2.0 | Appears in 4 tables, common join key |
 | stat_sa | DOUBLE | 91.5% | -2.0 | Appears in 3 tables, common join key |
 | lock_sa | DOUBLE | 91.5% | -2.0 | Appears in 3 tables, common join key |
 | prch_sa | DOUBLE | 91.5% | 2.0 | Appears in 3 tables, common join key |
 | idx_sa | DOUBLE | 91.5% | -2.0 | Appears in 3 tables, common join key |
 | imp_sa | DOUBLE | 91.5% | -2.0 | Appears in 3 tables, common join key |
-| stat_s | DOUBLE | 91.5% | 1.0 | Appears in 3 tables, common join key |
-| lock_s | DOUBLE | 91.5% | -2.0 | Appears in 3 tables, common join key |
+| stat_s | DOUBLE | 91.5% | -2.0 | Appears in 3 tables, common join key |
+| lock_s | DOUBLE | 91.5% | 0.0 | Appears in 3 tables, common join key |
 | prch_s | DOUBLE | 91.5% | -2.0 | Appears in 3 tables, common join key |
 | idx_s | DOUBLE | 91.5% | -2.0 | Appears in 3 tables, common join key |
 | imp_s | DOUBLE | 91.5% | -2.0 | Appears in 3 tables, common join key |
-| stat_eap | DOUBLE | 91.5% | 5.0 | Appears in 3 tables, common join key |
+| stat_eap | DOUBLE | 91.5% | -9.0 | Appears in 3 tables, common join key |
 | lock_eap | DOUBLE | 91.5% | 0.0 | Appears in 3 tables, common join key |
 | prch_eap | DOUBLE | 91.5% | -2.0 | Appears in 3 tables, common join key |
-| idx_eap | DOUBLE | 91.5% | -2.0 | Appears in 3 tables, common join key |
+| idx_eap | DOUBLE | 91.5% | 102368.0 | Appears in 3 tables, common join key |
 | imp_eap | DOUBLE | 91.5% | -2.0 | Appears in 3 tables, common join key |
-| ftemp15 | DOUBLE | 91.5% | -1.0 | Appears in 3 tables, common join key |
-| sa_excl | DOUBLE | 91.5% | -2.0 | Appears in 3 tables, common join key |
-| stat_sp | DOUBLE | 91.5% | 5.0 |  |
+| ftemp15 | DOUBLE | 91.5% | -2.0 | Appears in 3 tables, common join key |
+| sa_excl | DOUBLE | 91.5% | 2.0 | Appears in 3 tables, common join key |
+| stat_sp | DOUBLE | 91.5% | -9.0 |  |
 | form_f | DOUBLE | 91.5% | -2.0 | Appears in 3 tables, common join key |
-| stat_f | DOUBLE | 91.5% | 1.0 | Appears in 3 tables, common join key |
-| lock_f | DOUBLE | 91.5% | 0.0 | Appears in 3 tables, common join key |
+| stat_f | DOUBLE | 91.5% | 5.0 | Appears in 3 tables, common join key |
+| lock_f | DOUBLE | 91.5% | -2.0 | Appears in 3 tables, common join key |
 | prch_f | DOUBLE | 91.5% | -2.0 | Appears in 3 tables, common join key |
 | idx_f | DOUBLE | 91.5% | -2.0 | Appears in 3 tables, common join key |
 | imp_f | DOUBLE | 91.5% | -2.0 | Appears in 3 tables, common join key |
-| fybeg | DOUBLE | 91.5% | -2.0 | Appears in 3 tables, common join key |
+| fybeg | DOUBLE | 91.5% | -1.0 | Appears in 3 tables, common join key |
 | fyend | DOUBLE | 91.5% | -2.0 | Appears in 3 tables, common join key |
-| gpfs | DOUBLE | 91.5% | -2.0 | Appears in 3 tables, common join key |
+| gpfs | DOUBLE | 91.5% | -1.0 | Appears in 3 tables, common join key |
 | f1gasbcr | DOUBLE | 91.5% | -2.0 |  |
 | f1gasbal | DOUBLE | 91.5% | -2.0 | Appears in 3 tables, common join key |
-| stat_sfa | DOUBLE | 91.5% | 5.0 | Appears in 3 tables, common join key |
-| lock_sfa | DOUBLE | 91.5% | 0.0 | Appears in 3 tables, common join key |
+| stat_sfa | DOUBLE | 91.5% | -9.0 | Appears in 3 tables, common join key |
+| lock_sfa | DOUBLE | 91.5% | -2.0 | Appears in 3 tables, common join key |
 | prch_sfa | DOUBLE | 91.5% | -2.0 | Appears in 3 tables, common join key |
 | idx_sfa | DOUBLE | 91.5% | -2.0 | Appears in 3 tables, common join key |
 | imp_sfa | DOUBLE | 91.5% | -2.0 | Appears in 3 tables, common join key |
-| stat_gr | DOUBLE | 91.5% | -2.0 | Appears in 3 tables, common join key |
-| lock_gr | DOUBLE | 91.5% | -2.0 | Appears in 3 tables, common join key |
+| stat_gr | DOUBLE | 91.5% | 5.0 | Appears in 3 tables, common join key |
+| lock_gr | DOUBLE | 91.5% | 0.0 | Appears in 3 tables, common join key |
 | prch_gr | DOUBLE | 91.5% | -2.0 | Appears in 3 tables, common join key |
 | idx_gr | DOUBLE | 91.5% | -2.0 | Appears in 3 tables, common join key |
 | imp_gr | DOUBLE | 91.5% | -2.0 | Appears in 3 tables, common join key |
-| cohrtstu | DOUBLE | 91.5% | -2.0 | Appears in 3 tables, common join key |
-| pyaid | DOUBLE | 91.5% | 2.0 | Appears in 3 tables, common join key |
+| cohrtstu | DOUBLE | 91.5% | -1.0 | Appears in 3 tables, common join key |
+| pyaid | DOUBLE | 91.5% | -2.0 | Appears in 3 tables, common join key |
 | cohrtaid | DOUBLE | 91.5% | -2.0 | Appears in 3 tables, common join key |
 | sport1 | DOUBLE | 91.5% | -1.0 | Appears in 4 tables, common join key |
 | sport2 | DOUBLE | 91.5% | -2.0 | Appears in 4 tables, common join key |
 | sport3 | DOUBLE | 91.5% | -2.0 | Appears in 4 tables, common join key |
-| sport4 | DOUBLE | 91.5% | -1.0 | Appears in 4 tables, common join key |
-| sport5 | DOUBLE | 91.5% | -2.0 | Appears in 3 tables, common join key |
-| longpgm | DOUBLE | 91.5% | -1.0 | Appears in 3 tables, common join key |
-| cohrtmt | DOUBLE | 91.5% | 1.0 |  |
+| sport4 | DOUBLE | 91.5% | -2.0 | Appears in 4 tables, common join key |
+| sport5 | DOUBLE | 91.5% | 0.0 | Appears in 3 tables, common join key |
+| longpgm | DOUBLE | 91.5% | -2.0 | Appears in 3 tables, common join key |
+| cohrtmt | DOUBLE | 91.5% | 2.0 |  |
 | tpr | DOUBLE | 91.5% | -1.0 |  |
 | hpr | DOUBLE | 91.5% | -1.0 |  |
 | cufasb | DOUBLE | 97.7% | -2.0 | Appears in 3 tables, common join key |
 | cugasb | DOUBLE | 97.7% | -2.0 | Appears in 3 tables, common join key |
-| fte | DOUBLE | 99.8% | 168.0 |  |
+| fte | DOUBLE | 99.8% | 43.0 |  |
 | ocrmsi | DOUBLE | 91.5% | -2.0 |  |
 | ocrhsi | DOUBLE | 91.5% | -2.0 |  |
 | twoyrcat | DOUBLE | 97.7% | -4.0 |  |
 | rev_c | DOUBLE | 97.7% | 0.0 | Appears in 3 tables, common join key |
-| rev_ef | DOUBLE | 97.7% | -2.0 | Appears in 3 tables, common join key |
-| rev_sa | DOUBLE | 97.7% | 0.0 | Appears in 3 tables, common join key |
-| rev_s | DOUBLE | 97.7% | -2.0 | Appears in 3 tables, common join key |
-| rev_eap | DOUBLE | 97.7% | 0.0 | Appears in 3 tables, common join key |
+| rev_ef | DOUBLE | 97.7% | 0.0 | Appears in 3 tables, common join key |
+| rev_sa | DOUBLE | 97.7% | -2.0 | Appears in 3 tables, common join key |
+| rev_s | DOUBLE | 97.7% | 0.0 | Appears in 3 tables, common join key |
+| rev_eap | DOUBLE | 97.7% | -2.0 | Appears in 3 tables, common join key |
 | r_form_f | DOUBLE | 97.7% | -2.0 |  |
-| rev_f | DOUBLE | 97.7% | 0.0 | Appears in 3 tables, common join key |
+| rev_f | DOUBLE | 97.7% | -2.0 | Appears in 3 tables, common join key |
 | rev_sfa | DOUBLE | 97.7% | 0.0 | Appears in 3 tables, common join key |
 | rev_gr | DOUBLE | 97.7% | 0.0 | Appears in 3 tables, common join key |
 | affil | DOUBLE | 93.8% | -3.0 |  |
 | pctmin1 | DOUBLE | 93.8% | -1.0 |  |
-| pctmin2 | DOUBLE | 93.8% | -1.0 |  |
+| pctmin2 | DOUBLE | 93.8% | -2.0 |  |
 | pctmin3 | DOUBLE | 93.8% | -1.0 |  |
-| pctmin4 | DOUBLE | 93.8% | 0.0 |  |
+| pctmin4 | DOUBLE | 93.8% | -2.0 |  |
 | ptacipef | DOUBLE | 93.8% | -2.0 | Appears in 3 tables, common join key |
 | transver | DOUBLE | 93.8% | -2.0 |  |
 | cindon | DOUBLE | 100.0% |  | Appears in 3 tables, common join key |
@@ -4662,11 +4662,11 @@ Rows: 132,928
 
 | Column | Type | Nulls | Example | Join |
 |--------|------|-------|---------|------|
-| unitid | BIGINT | 0.0% | 201140 | Primary institution ID, joins across all IPEDS tables |
+| unitid | BIGINT | 0.0% | 101693 | Primary institution ID, joins across all IPEDS tables |
 | year | BIGINT | 0.0% | 2000 | Appears in 26 tables, common join key |
-| institution_name | VARCHAR | 0.1% | Athenaeum of Ohio | Appears in 4 tables, common join key |
-| state | VARCHAR | 0.1% | OH | Appears in 4 tables, common join key |
+| institution_name | VARCHAR | 0.1% | University of Mobile | Appears in 4 tables, common join key |
+| state | VARCHAR | 0.1% | AL | Appears in 4 tables, common join key |
 | sector | BIGINT | 0.1% | 1 | Appears in 3 tables, common join key |
-| tuition_in_state | DOUBLE | 0.0% | 10050.0 |  |
-| tuition_out_state | DOUBLE | 0.0% | 10050.0 |  |
-| tuition_in_district | DOUBLE | 0.0% | 10050.0 |  |
+| tuition_in_state | DOUBLE | 0.0% | 1550.0 |  |
+| tuition_out_state | DOUBLE | 0.0% | 8160.0 |  |
+| tuition_in_district | DOUBLE | 0.0% | 1527.0 |  |
