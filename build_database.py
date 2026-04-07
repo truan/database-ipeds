@@ -73,7 +73,147 @@ logging.basicConfig(
 log = logging.getLogger("ipeds")
 
 # ---------------------------------------------------------------------------
-# File manifest: survey -> list of (year, filename) 
+# Validation expectations
+# ---------------------------------------------------------------------------
+# Expected year ranges and minimum row counts per year for each table.
+# "known_missing" lists years that are expected to fail (documented upstream).
+# Any failure NOT in known_missing is flagged as unexpected.
+
+EXPECTED = {
+    "hd":     {"years": (2002, 2024), "min_rows": 5000, "known_missing": []},
+    "ic":     {"years": (2000, 2024), "min_rows": 5000, "known_missing": []},
+    "ic_ay":  {"years": (2000, 2023), "min_rows": 2000, "known_missing": [2009, 2010, 2011, 2012]},
+    "ic_py":  {"years": (2000, 2023), "min_rows": 2000, "known_missing": []},
+    "adm":    {"years": (2014, 2023), "min_rows": 1500, "known_missing": []},
+    "efia":   {"years": (2002, 2024), "min_rows": 5000, "known_missing": []},
+    "effy":   {"years": (2002, 2024), "min_rows": 5000, "known_missing": []},
+    "ef_a":   {"years": (2000, 2023), "min_rows": 50000, "known_missing": []},
+    "ef_b":   {"years": (2000, 2023), "min_rows": 50000, "known_missing": []},
+    "ef_c":   {"years": (2000, 2023), "min_rows": 20000, "known_missing": []},
+    "ef_d":   {"years": (2000, 2023), "min_rows": 5000, "known_missing": [2001]},
+    "c_a":    {"years": (2000, 2024), "min_rows": 150000, "known_missing": []},
+    "sfa":    {"years": (2002, 2023), "min_rows": 5000, "known_missing": [2010]},
+    "gr":     {"years": (1997, 2023), "min_rows": 25000, "known_missing": []},
+    "gr200":  {"years": (2008, 2023), "min_rows": 4000, "known_missing": []},
+    "om":     {"years": (2015, 2023), "min_rows": 10000, "known_missing": []},
+    "eap":    {"years": (2001, 2023), "min_rows": 40000, "known_missing": []},
+    "sal_is": {"years": (2012, 2023), "min_rows": 10000, "known_missing": [2012]},
+    "al":     {"years": (2014, 2023), "min_rows": 3000, "known_missing": []},
+    "flags":  {"years": (2004, 2024), "min_rows": 5000, "known_missing": []},
+    "f1a":    {"years": (2002, 2023), "min_rows": 1000, "known_missing": []},
+    "f2":     {"years": (2001, 2023), "min_rows": 1500, "known_missing": []},
+    "f3":     {"years": (2001, 2023), "min_rows": 1500, "known_missing": []},
+}
+
+
+def validate(con: duckdb.DuckDBPyConnection) -> bool:
+    """
+    Check each table against EXPECTED year ranges and row-count floors.
+    Returns True if all checks pass (no unexpected issues).
+    """
+    log.info(f"\n{'='*60}")
+    log.info("VALIDATION")
+    log.info(f"{'='*60}")
+
+    existing_tables = set()
+    try:
+        existing_tables = {
+            row[0] for row in con.execute(
+                "SELECT table_name FROM information_schema.tables "
+                "WHERE table_schema = 'main' AND table_type = 'BASE TABLE'"
+            ).fetchall()
+        }
+    except Exception:
+        pass
+
+    all_pass = True
+
+    for table, spec in EXPECTED.items():
+        yr_min, yr_max = spec["years"]
+        min_rows = spec["min_rows"]
+        known_missing = set(spec["known_missing"])
+        expected_years = set(range(yr_min, yr_max + 1)) - known_missing
+
+        # Table missing entirely
+        if table not in existing_tables:
+            log.warning(f"  {table:<15} FAIL  table not found")
+            all_pass = False
+            continue
+
+        # Get per-year row counts
+        try:
+            year_col = "year"
+            # Detect year column name
+            cols = {
+                row[0].lower()
+                for row in con.execute(f"DESCRIBE {table}").fetchall()
+            }
+            if "year" in cols:
+                year_col = "year"
+            elif "unitid" in cols:
+                # IPEDS tables use 'year' extracted during harmonization
+                year_col = "year"
+
+            rows = con.execute(
+                f"SELECT {year_col}, COUNT(*) FROM {table} "
+                f"GROUP BY {year_col} ORDER BY {year_col}"
+            ).fetchall()
+        except Exception as e:
+            log.warning(f"  {table:<15} FAIL  cannot query: {e}")
+            all_pass = False
+            continue
+
+        actual_years = {int(r[0]) for r in rows if r[0] is not None}
+        year_counts = {int(r[0]): r[1] for r in rows if r[0] is not None}
+
+        # Missing years
+        missing = expected_years - actual_years
+        unexpected_missing = missing - known_missing
+
+        # Low row counts
+        low_years = [
+            (yr, cnt) for yr, cnt in year_counts.items()
+            if yr in expected_years and cnt < min_rows
+        ]
+
+        # Report
+        n_expected = len(expected_years)
+        n_present = len(actual_years & expected_years)
+
+        if not unexpected_missing and not low_years:
+            status = "PASS"
+            detail = f"{n_present}/{n_expected} years"
+            if known_missing:
+                detail += f" (known missing: {sorted(known_missing)})"
+            log.info(f"  {table:<15} {status}  {detail}")
+        else:
+            all_pass = False
+            if unexpected_missing:
+                status = "FAIL" if len(unexpected_missing) > 2 else "WARN"
+                log.warning(
+                    f"  {table:<15} {status}  {n_present}/{n_expected} years — "
+                    f"unexpected missing: {sorted(unexpected_missing)}"
+                )
+            if low_years:
+                for yr, cnt in sorted(low_years):
+                    log.warning(
+                        f"  {table:<15} WARN  year {yr}: {cnt:,} rows "
+                        f"(expected >= {min_rows:,})"
+                    )
+
+    if all_pass:
+        log.info("\n  All tables passed validation.")
+    else:
+        log.warning(
+            "\n  Some tables have unexpected issues. "
+            "See above for details."
+        )
+
+    return all_pass
+
+
+# ---------------------------------------------------------------------------
+# File manifest: survey -> list of (year, filename)
 # We define these explicitly so we have full control over what goes in.
 # ---------------------------------------------------------------------------
 
@@ -985,12 +1125,12 @@ def create_metadata(con: duckdb.DuckDBPyConnection, survey_stats: dict):
     con.unregister('_meta')
 
 
-def _setup_file_logging() -> Path:
-    """Add a file handler so the build log is saved to ~/ipeds/logs/."""
+def _setup_file_logging(prefix: str = "build") -> Path:
+    """Add a file handler so the log is saved to ~/ipeds/logs/."""
     from datetime import datetime
     LOG_DIR.mkdir(parents=True, exist_ok=True)
     timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    log_path = LOG_DIR / f"build_{timestamp}.log"
+    log_path = LOG_DIR / f"{prefix}_{timestamp}.log"
     fh = logging.FileHandler(log_path, encoding="utf-8")
     fh.setLevel(logging.INFO)
     fh.setFormatter(logging.Formatter(
@@ -1046,13 +1186,29 @@ def show_status():
 def main():
     if '--help' in sys.argv or '-h' in sys.argv:
         print(__doc__)
-        print("Available tables:", ', '.join(sorted(build_manifest().keys())))
+        print("\nAvailable tables:", ', '.join(sorted(build_manifest().keys())))
+        print("\nFlags:")
+        print("  --fresh      Delete entire database and rebuild from scratch")
+        print("  --status     Show which tables exist in the database")
+        print("  --validate   Run validation checks against existing database")
+        print("  (default)    Resume: only drop and rebuild the specified tables")
         sys.exit(0)
 
     if '--status' in sys.argv:
         show_status()
         sys.exit(0)
 
+    if '--validate' in sys.argv:
+        if not DB_PATH.exists():
+            print(f"Database not found: {DB_PATH}")
+            sys.exit(1)
+        _setup_file_logging(prefix="validate")
+        con = duckdb.connect(str(DB_PATH), read_only=True)
+        passed = validate(con)
+        con.close()
+        sys.exit(0 if passed else 1)
+
+    fresh = '--fresh' in sys.argv
     log_path = _setup_file_logging()
 
     manifest = build_manifest()
@@ -1068,15 +1224,21 @@ def main():
             sys.exit(1)
         manifest = {k: v for k, v in manifest.items() if k in selected}
 
-    # Open database WITHOUT deleting it (resumable).
-    # Only drop the tables we are about to rebuild to avoid duplicate rows.
-    con = duckdb.connect(str(DB_PATH))
-    for survey in manifest:
-        try:
-            con.execute(f"DROP TABLE IF EXISTS {survey}")
-            log.info(f"Dropped existing table '{survey}' (will rebuild)")
-        except Exception:
-            pass
+    if fresh:
+        # Full fresh rebuild: delete the entire database
+        if DB_PATH.exists():
+            DB_PATH.unlink()
+            log.info(f"Deleted existing database (--fresh)")
+        con = duckdb.connect(str(DB_PATH))
+    else:
+        # Resume mode: open existing database, drop only selected tables
+        con = duckdb.connect(str(DB_PATH))
+        for survey in manifest:
+            try:
+                con.execute(f"DROP TABLE IF EXISTS {survey}")
+                log.info(f"Dropped existing table '{survey}' (will rebuild)")
+            except Exception:
+                pass
 
     survey_stats = {}
 
@@ -1125,6 +1287,9 @@ def main():
     log.info(f"\n  Database size: {db_size:.1f} MB")
     log.info(f"  Database path: {DB_PATH.absolute()}")
     log.info(f"  Log file: {log_path}")
+
+    # Validate against expected year ranges and row counts
+    validate(con)
 
     con.close()
     log.info("Done!")

@@ -9,7 +9,7 @@ Build a harmonized [DuckDB](https://duckdb.org/) database from 20+ years of
 uv run python build_database.py
 ```
 
-The result is a ~1 GB database with **27 million rows** across **23 tables**
+The result is a ~1.2 GB database with **26.7 million rows** across **23 tables**
 covering every U.S. postsecondary institution from 1997 to 2024—admissions,
 enrollment, completions, tuition, financial aid, graduation rates, staffing,
 and more—ready to query with SQL.
@@ -248,10 +248,13 @@ are converted to `NULL`. Columns with >70% numeric values are auto-cast to
 
 ### Known Gaps
 
-- `EF2001D` (2001 retention rates): returns HTTP 404 from NCES
-- `IC_AY` 2009–2012: downloaded as 0-row placeholder files
-- Pre-2012 salary data (`SAL` without `_IS` suffix): uses a different schema;
-  omitted for now
+- `ef_d` 2001: NCES returns HTTP 404 for `EF2001D`
+- `ic_ay` 2009–2012: downloaded as 0-row placeholder files from NCES
+- `sfa` 2010: downloaded as 0-row placeholder file from NCES
+- `sal_is` pre-2012: `SAL` without `_IS` suffix uses a different schema; omitted for now
+
+These are documented in the `EXPECTED` dictionary's `known_missing` field in
+`build_database.py` and excluded from validation failures.
 
 ## Building a Subset
 
@@ -263,19 +266,28 @@ uv run python build_database.py hd c_a adm
 
 ## Resuming an Interrupted Build
 
-The build is resumable: it only drops the tables being rebuilt, preserving
-completed tables. Downloaded ZIPs in `~/ipeds/raw/` are cached and never
-re-downloaded.
+The build supports two modes:
+
+- **Resume (default):** only drops and rebuilds the specified tables,
+  preserving completed tables. Safe to interrupt and re-run.
+- **Fresh (`--fresh`):** deletes the entire database and rebuilds from scratch.
+  Use this for a clean full build.
+
+Downloaded ZIPs in `~/ipeds/raw/` are cached and never re-downloaded in
+either mode.
 
 ```bash
 # Check which tables are already built
 uv run python build_database.py --status
 
-# Build only the missing tables
+# Full fresh rebuild (deletes DB first)
+caffeinate -i uv run python build_database.py --fresh
+
+# Build only the missing tables (resume mode)
 uv run python build_database.py efia effy ef_a ef_b ef_c ef_d
 
-# Or rebuild everything (each table is dropped before re-creating)
-uv run python build_database.py
+# Rebuild specific tables (resume mode — other tables untouched)
+uv run python build_database.py al f1a flags
 ```
 
 Recommended workflow for a full build on an unreliable machine:
@@ -294,6 +306,19 @@ To prevent macOS from sleeping during a long build:
 ```bash
 caffeinate -i uv run python build_database.py
 ```
+
+## Validation
+
+Each build automatically validates tables against expected year ranges and
+row-count floors. To run validation standalone (without rebuilding):
+
+```bash
+uv run python build_database.py --validate
+```
+
+This checks every table for missing years, unexpectedly low row counts, and
+missing tables. Known upstream gaps (e.g., EF2001D returning 404) are excluded.
+The exit code is 0 if all checks pass, 1 if any unexpected issues are found.
 
 ## Build Logs
 

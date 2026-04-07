@@ -14,7 +14,7 @@ A forked ETL pipeline that builds a unified DuckDB database from 20+ years of IP
 Write access for the GitHub repo:
 - **Editable:** `build_database.py`, `add_datapond_metadata.py`, `examples/` — scripts and examples
 - **Read-only:** `~/ipeds/raw/` — cached NCES downloads (~720 MB, outside repo, do not modify)
-- **Read-only:** `~/ipeds/ipeds.duckdb` — output database (~1.1 GB, outside repo); rebuild with `uv run python build_database.py`
+- **Read-only:** `~/ipeds/ipeds.duckdb` — output database (~1.2 GB, outside repo); rebuild with `uv run python build_database.py`
 
 Do not change files in any Dropbox folders unless explicitly allowed to do so.
 
@@ -35,12 +35,12 @@ database-ipeds/               # GitHub repo
 ~/ipeds/                      # Data directory (outside repo, not committed)
 ├── raw/                       # Cached NCES ZIP files (~720 MB)
 ├── logs/                      # Timestamped build logs
-└── ipeds.duckdb               # Output DuckDB database (~1.1 GB)
+└── ipeds.duckdb               # Output DuckDB database (~1.2 GB)
 ```
 
 ## Output Database
 
-`ipeds.duckdb` — 27 million rows across 23 tables, 1997–2024. Key tables:
+`ipeds.duckdb` — 26.7 million rows across 23 tables, 1997–2024. Key tables:
 
 | Table | Content |
 |-------|---------|
@@ -59,9 +59,15 @@ Every table has `unitid` (institution ID) and `year` for joining.
 
 ```bash
 uv sync
-uv run python build_database.py        # full build
-uv run python build_database.py hd adm # rebuild specific tables only
+uv run python build_database.py --fresh     # full fresh build (deletes DB first)
+uv run python build_database.py hd adm      # rebuild specific tables only (resume mode)
+uv run python build_database.py --status    # check which tables are built
+uv run python build_database.py --validate  # validate year coverage and row counts
 ```
+
+Build logs are saved to `~/ipeds/logs/`. Validation logs use `validate_*.log` prefix.
+
+Known gaps (in `EXPECTED["known_missing"]`): ef_d 2001 (NCES 404), ic_ay 2009–2012 (0-row), sfa 2010 (0-row), sal_is pre-2012 (different schema).
 
 API key / credentials: none needed (all data from public NCES servers).
 
