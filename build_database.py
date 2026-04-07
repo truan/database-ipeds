@@ -63,6 +63,8 @@ BASE_URL = "https://nces.ed.gov/ipeds/datacenter/data/"
 DATA_DIR = Path("~/ipeds/raw").expanduser()
 DB_PATH  = Path("~/ipeds/ipeds.duckdb").expanduser()
 
+LOG_DIR = Path("~/ipeds/logs").expanduser()
+
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s",
@@ -983,60 +985,134 @@ def create_metadata(con: duckdb.DuckDBPyConnection, survey_stats: dict):
     con.unregister('_meta')
 
 
+def _setup_file_logging() -> Path:
+    """Add a file handler so the build log is saved to ~/ipeds/logs/."""
+    from datetime import datetime
+    LOG_DIR.mkdir(parents=True, exist_ok=True)
+    timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    log_path = LOG_DIR / f"build_{timestamp}.log"
+    fh = logging.FileHandler(log_path, encoding="utf-8")
+    fh.setLevel(logging.INFO)
+    fh.setFormatter(logging.Formatter(
+        "%(asctime)s [%(levelname)s] %(message)s", datefmt="%H:%M:%S"
+    ))
+    logging.getLogger().addHandler(fh)
+    log.info(f"Log file: {log_path}")
+    return log_path
+
+
+def show_status():
+    """Print which tables already exist in the database."""
+    if not DB_PATH.exists():
+        print(f"Database not found: {DB_PATH}")
+        return
+
+    con = duckdb.connect(str(DB_PATH), read_only=True)
+    all_tables = sorted(build_manifest().keys())
+    existing = set()
+    try:
+        existing = {
+            row[0]
+            for row in con.execute(
+                "SELECT table_name FROM information_schema.tables "
+                "WHERE table_schema = 'main' AND table_type = 'BASE TABLE'"
+            ).fetchall()
+        }
+    except Exception:
+        pass
+
+    print(f"Database: {DB_PATH}")
+    print(f"{'Table':<15} {'Status'}")
+    print("-" * 35)
+    for t in all_tables:
+        if t in existing:
+            try:
+                n = con.execute(f"SELECT COUNT(*) FROM {t}").fetchone()[0]
+                print(f"  {t:<15} done  ({n:,} rows)")
+            except Exception:
+                print(f"  {t:<15} done  (row count unknown)")
+        else:
+            print(f"  {t:<15} missing")
+
+    missing = [t for t in all_tables if t not in existing]
+    if missing:
+        print(f"\nTo build missing tables:")
+        print(f"  uv run python build_database.py {' '.join(missing)}")
+    else:
+        print("\nAll tables built.")
+    con.close()
+
+
 def main():
     if '--help' in sys.argv or '-h' in sys.argv:
         print(__doc__)
         print("Available tables:", ', '.join(sorted(build_manifest().keys())))
         sys.exit(0)
-    
-    # Remove existing DB
-    if DB_PATH.exists():
-        DB_PATH.unlink()
-    
-    con = duckdb.connect(str(DB_PATH))
-    
+
+    if '--status' in sys.argv:
+        show_status()
+        sys.exit(0)
+
+    log_path = _setup_file_logging()
+
     manifest = build_manifest()
-    
+
     # Allow filtering to specific surveys via command line
-    if len(sys.argv) > 1:
-        selected = set(sys.argv[1:])
+    args = [a for a in sys.argv[1:] if not a.startswith('-')]
+    if args:
+        selected = set(args)
+        bad = selected - set(manifest.keys())
+        if bad:
+            print(f"Unknown tables: {bad}")
+            print(f"Valid: {sorted(manifest.keys())}")
+            sys.exit(1)
         manifest = {k: v for k, v in manifest.items() if k in selected}
-    
+
+    # Open database WITHOUT deleting it (resumable).
+    # Only drop the tables we are about to rebuild to avoid duplicate rows.
+    con = duckdb.connect(str(DB_PATH))
+    for survey in manifest:
+        try:
+            con.execute(f"DROP TABLE IF EXISTS {survey}")
+            log.info(f"Dropped existing table '{survey}' (will rebuild)")
+        except Exception:
+            pass
+
     survey_stats = {}
-    
+
     for survey, file_list in manifest.items():
         harmonizer = HARMONIZERS.get(survey, harmonize_generic)
         stats = process_survey(con, survey, file_list, harmonizer)
         survey_stats[survey] = stats
-    
+
     # Create analytical views
     create_views(con)
-    
+
     # Create metadata
     create_metadata(con, survey_stats)
-    
+
     # Summary
     log.info(f"\n{'='*60}")
     log.info("DATABASE SUMMARY")
     log.info(f"{'='*60}")
-    
+
     tables = con.execute("SELECT * FROM _metadata ORDER BY table_name").fetchdf()
     for _, row in tables.iterrows():
         yr = f"{int(row['min_year'])}-{int(row['max_year'])}" if row['min_year'] else "N/A"
         log.info(f"  {row['table_name']:15s}: {row['row_count']:>10,} rows | {row['column_count']:>4} cols | years {yr}")
-    
+
     total_rows = tables['row_count'].sum()
     log.info(f"\n  Total rows: {total_rows:,}")
-    
+
     # Log inconsistencies/notes
     log.info(f"\n{'='*60}")
     log.info("HARMONIZATION NOTES")
     log.info(f"{'='*60}")
-    
+
     for survey, stats in survey_stats.items():
         if stats.get('failed_years'):
             log.info(f"  {survey}: failed years = {stats['failed_years']}")
-    
+
     # Check for column count variation across years
     for survey, stats in survey_stats.items():
         if 'year_stats' in stats and stats['year_stats']:
@@ -1044,11 +1120,12 @@ def main():
             if len(set(col_counts)) > 1:
                 min_c, max_c = min(col_counts), max(col_counts)
                 log.info(f"  {survey}: column count varies {min_c}-{max_c} across years (harmonized via union)")
-    
+
     db_size = DB_PATH.stat().st_size / (1024 * 1024)
     log.info(f"\n  Database size: {db_size:.1f} MB")
     log.info(f"  Database path: {DB_PATH.absolute()}")
-    
+    log.info(f"  Log file: {log_path}")
+
     con.close()
     log.info("Done!")
 

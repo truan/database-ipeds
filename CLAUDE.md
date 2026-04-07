@@ -34,6 +34,7 @@ database-ipeds/               # GitHub repo
 
 ~/ipeds/                      # Data directory (outside repo, not committed)
 ├── raw/                       # Cached NCES ZIP files (~720 MB)
+├── logs/                      # Timestamped build logs
 └── ipeds.duckdb               # Output DuckDB database (~1.1 GB)
 ```
 

@@ -261,11 +261,51 @@ To rebuild only specific tables (faster for development):
 uv run python build_database.py hd c_a adm
 ```
 
+## Resuming an Interrupted Build
+
+The build is resumable: it only drops the tables being rebuilt, preserving
+completed tables. Downloaded ZIPs in `~/ipeds/raw/` are cached and never
+re-downloaded.
+
+```bash
+# Check which tables are already built
+uv run python build_database.py --status
+
+# Build only the missing tables
+uv run python build_database.py efia effy ef_a ef_b ef_c ef_d
+
+# Or rebuild everything (each table is dropped before re-creating)
+uv run python build_database.py
+```
+
+Recommended workflow for a full build on an unreliable machine:
+
+```bash
+# Build in batches — each batch is safe to interrupt and resume
+uv run python build_database.py hd ic ic_ay ic_py adm
+uv run python build_database.py efia effy ef_a ef_b ef_c ef_d
+uv run python build_database.py c_a sfa gr gr200 om
+uv run python build_database.py eap sal_is al flags
+uv run python build_database.py f1a f2 f3
+```
+
+To prevent macOS from sleeping during a long build:
+
+```bash
+caffeinate -i uv run python build_database.py
+```
+
+## Build Logs
+
+Each run saves a timestamped log to `~/ipeds/logs/` (e.g.,
+`build_2026-04-07_19-18-04.log`). Logs capture the same output shown in the
+terminal. Check them for failed years, column count notes, and row counts.
+
 ## Project Structure
 
 ```
 database-ipeds/               # GitHub repo
-├── build_database.py          # ETL pipeline (~1,050 lines)
+├── build_database.py          # ETL pipeline (~1,050 lines) — resumable build
 ├── add_datapond_metadata.py   # Generates _metadata table and DICTIONARY.md
 ├── pyproject.toml             # Python dependencies
 ├── uv.lock                    # Locked dependency versions
@@ -278,6 +318,7 @@ database-ipeds/               # GitHub repo
 
 ~/ipeds/                      # Data directory (outside repo, not committed)
 ├── raw/                       # Cached NCES ZIP downloads (~720 MB)
+├── logs/                      # Timestamped build logs
 └── ipeds.duckdb               # Output database (~1.1 GB)
 ```
 
