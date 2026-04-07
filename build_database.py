@@ -60,8 +60,8 @@ import duckdb
 # ---------------------------------------------------------------------------
 
 BASE_URL = "https://nces.ed.gov/ipeds/datacenter/data/"
-DATA_DIR = Path("data/raw")
-DB_PATH = Path("ipeds.duckdb")
+DATA_DIR = Path("~/ipeds/raw").expanduser()
+DB_PATH  = Path("~/ipeds/ipeds.duckdb").expanduser()
 
 logging.basicConfig(
     level=logging.INFO,

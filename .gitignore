@@ -1,7 +1,4 @@
-# Data (large; rebuilt from source)
-data/
-*.duckdb
-*.duckdb.wal
+# Data (large; stored outside repo in ~/ipeds/, hence no need to exclude here)
 
 # Python
 __pycache__/

@@ -1,5 +1,7 @@
 # IPEDS Database
 
+> **Fork of [paulgp/ipeds-database](https://github.com/paulgp/ipeds-database)** by Paul Goldsmith-Pinkham. This fork ([truan/database-ipeds](https://github.com/truan/database-ipeds)) adds a data dictionary (`add_datapond_metadata.py`, `DICTIONARY.md`) and finance tables (`f1a`, `f2`, `f3`).
+
 Build a harmonized [DuckDB](https://duckdb.org/) database from 20+ years of
 [IPEDS](https://nces.ed.gov/ipeds/) higher-education data in a single command.
 
@@ -29,21 +31,21 @@ query instantly.
 [uv](https://github.com/astral-sh/uv).
 
 ```bash
-git clone https://github.com/paulgp/ipeds-database.git
-cd ipeds-database
+git clone https://github.com/truan/database-ipeds.git
+cd database-ipeds
 
 # Install dependencies and build the database
 uv sync
 uv run python build_database.py
 ```
 
-The first run downloads ~720 MB of ZIP files from NCES (cached in `data/raw/`
-so rebuilds are fast) and produces `ipeds.duckdb` (~1.1 GB).
+The first run downloads ~720 MB of ZIP files from NCES (cached in `~/ipeds/raw/`
+so rebuilds are fast) and produces `~/ipeds/ipeds.duckdb` (~1.1 GB).
 
 Then query with any DuckDB client:
 
 ```bash
-duckdb ipeds.duckdb
+duckdb ~/ipeds/ipeds.duckdb
 ```
 
 ```sql
@@ -59,7 +61,7 @@ Or from Python:
 
 ```python
 import duckdb
-con = duckdb.connect("ipeds.duckdb", read_only=True)
+con = duckdb.connect("~/ipeds/ipeds.duckdb", read_only=True)
 con.sql("SELECT * FROM _metadata").show()
 ```
 
@@ -262,30 +264,28 @@ uv run python build_database.py hd c_a adm
 ## Project Structure
 
 ```
-ipeds-database/
-├── build_database.py          # ETL pipeline (single file, ~600 lines)
+database-ipeds/               # GitHub repo
+├── build_database.py          # ETL pipeline (~1,050 lines)
+├── add_datapond_metadata.py   # Generates _metadata table and DICTIONARY.md
 ├── pyproject.toml             # Python dependencies
 ├── uv.lock                    # Locked dependency versions
 ├── LICENSE                    # MIT
 ├── README.md
-├── examples/
-│   ├── query_examples.sql     # 10 example SQL queries
-│   └── figures/               # R scripts and output PNGs
-│       ├── degree_plots.R
-│       ├── mba_expanded_plot.R
-│       ├── mba_stacked_plot.R
-│       ├── econ_masters_plot.R
-│       ├── residence_plot.R
-│       └── *.png
-├── data/raw/                  # Cached NCES downloads (~720 MB, gitignored)
-└── ipeds.duckdb               # Output database (~1.1 GB, gitignored)
+├── DICTIONARY.md              # Auto-generated column-level data dictionary
+└── examples/
+    ├── query_examples.sql     # 11 example SQL queries
+    └── figures/               # R scripts and output PNGs
+
+~/ipeds/                      # Data directory (outside repo, not committed)
+├── raw/                       # Cached NCES ZIP downloads (~720 MB)
+└── ipeds.duckdb               # Output database (~1.1 GB)
 ```
 
 ## Requirements
 
 - Python 3.11+
 - [uv](https://github.com/astral-sh/uv) (or pip: `pip install duckdb pandas requests beautifulsoup4 lxml`)
-- ~2 GB disk space (720 MB downloads + 1.1 GB database)
+- ~2 GB disk space in `~/ipeds/` (720 MB downloads + 1.1 GB database)
 - Internet connection for initial download
 
 ## Data Source
