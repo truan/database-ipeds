@@ -276,35 +276,32 @@ The build supports two modes:
 Downloaded ZIPs in `~/ipeds/raw/` are cached and never re-downloaded in
 either mode.
 
+Builds can take 10+ minutes per table. On macOS, prefix long-running commands
+with `caffeinate -i` to prevent idle sleep (which pauses the process and can
+cause DNS failures on wake). `caffeinate` ships with macOS — no install needed.
+
 ```bash
-# Check which tables are already built
+# Check which tables are already built (instant, no caffeinate needed)
 uv run python build_database.py --status
 
 # Full fresh rebuild (deletes DB first)
 caffeinate -i uv run python build_database.py --fresh
 
 # Build only the missing tables (resume mode)
-uv run python build_database.py efia effy ef_a ef_b ef_c ef_d
+caffeinate -i uv run python build_database.py efia effy ef_a ef_b ef_c ef_d
 
 # Rebuild specific tables (resume mode — other tables untouched)
-uv run python build_database.py al f1a flags
+caffeinate -i uv run python build_database.py al f1a flags
 ```
 
-Recommended workflow for a full build on an unreliable machine:
+Recommended workflow for a full build in batches:
 
 ```bash
-# Build in batches — each batch is safe to interrupt and resume
-uv run python build_database.py hd ic ic_ay ic_py adm
-uv run python build_database.py efia effy ef_a ef_b ef_c ef_d
-uv run python build_database.py c_a sfa gr gr200 om
-uv run python build_database.py eap sal_is al flags
-uv run python build_database.py f1a f2 f3
-```
-
-To prevent macOS from sleeping during a long build:
-
-```bash
-caffeinate -i uv run python build_database.py
+caffeinate -i uv run python build_database.py hd ic ic_ay ic_py adm
+caffeinate -i uv run python build_database.py efia effy ef_a ef_b ef_c ef_d
+caffeinate -i uv run python build_database.py c_a sfa gr gr200 om
+caffeinate -i uv run python build_database.py eap sal_is al flags
+caffeinate -i uv run python build_database.py f1a f2 f3
 ```
 
 ## Validation
